@@ -1,0 +1,22 @@
+# Layanan systemd untuk Reverb (WebSocket server NDS portal).
+# Pasang di /etc/systemd/system/reverb.service, lalu:
+#   systemctl daemon-reload
+#   systemctl enable --now reverb
+# Sesuaikan WorkingDirectory dan path PHP bila lokasi deploy berbeda.
+
+[Unit]
+Description=Laravel Reverb WebSocket (NDS portal, internal 127.0.0.1:8081)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/NDS-WEBSITE
+ExecStart=/usr/bin/php8.3 artisan reverb:start --host=127.0.0.1 --port=8081
+Restart=always
+RestartSec=3
+# Kredensial diambil dari .env Laravel di WorkingDirectory saat bootstrap
+
+[Install]
+WantedBy=multi-user.target

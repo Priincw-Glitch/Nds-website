@@ -1,0 +1,192 @@
+=====================================================================
+ NDS-WEBSITE - CHECKLIST DEPLOY KE VPS
+ Project : Nusantara Digital Solution
+ Catatan : Lanjutan setelah project di-upload ke server (ada SSH)
+=====================================================================
+
+!!! PENTING - SEBELUM APA PUN !!!
+- JANGAN upload .env dari lokal ke server.
+  (.env lokal: DB root tanpa password, APP_URL=http://nds-website.test)
+- .env lokal berisi app password Gmail asli dan ADMIN_PASSWORD.
+  Jangan sampai masuk git / screenshot. Kalau terekspos, rotasi
+  app password Gmail-nya.
+
+
+---------------------------------------------------------------------
+LANGKAH 1 - BUAAT .ENV PRODUKSI DI SERVER
+---------------------------------------------------------------------
+Jalankan ini lewat SSH / terminal server:
+
+  cd /var/www/nds-website
+  cp .env.example .env
+
+Lalu edit .env, ubah bagian penting menjadi:
+
+  APP_ENV=production
+  APP_DEBUG=false
+  APP_URL=https://domainmu.id
+
+  DB_CONNECTION=mysql
+  DB_HOST=127.0.0.1
+  DB_DATABASE=nds_website
+  DB_USERNAME=(user db server)
+  DB_PASSWORD=(password db server)
+
+  BROADCAST_CONNECTION=reverb
+  QUEUE_CONNECTION=database
+  CACHE_STORE=database
+  SESSION_DRIVER=database
+
+  REVERB_APP_ID=(dari .env lokal, boleh sama)
+  REVERB_APP_KEY=(dari .env lokal)
+  REVERB_APP_SECRET=(dari .env lokal)
+  REVERB_HOST="domainmu.id"      <-- BUKAN 127.0.0.1
+  REVERB_PORT=443
+  REVERB_SCHEME=https
+
+Catatan:
+- REVERB_HOST / PORT / SCHEME ini yang dipakai CSP (SecurityHeaders)
+  dan DI-BAKE ke file JS sebagai VITE_REVERB_* saat "npm run build".
+- VITE_REVERB_* di .env cukup jadi passthrough dari REVERB_*.
+
+
+---------------------------------------------------------------------
+LANGKAH 2 - DEPENDENSI, KEY, DATABASE, STORAGE
+---------------------------------------------------------------------
+  composer install --no-dev --optimize-autoloader
+  php artisan key:generate
+  php artisan migrate --seed
+  php artisan storage:link
+  chmod -R 775 storage bootstrap/cache
+
+Catatan database:
+- "migrate --seed" itu lama karena seeder coverage (tabel indonesia_*)
+  isi ~7.800 baris. Alternatif lebih cepat: import dump SQL dari
+  komputer lokal langsung ke DB server.
+
+
+---------------------------------------------------------------------
+LANGKAH 3 - BUILD ASSET DI SERVER (WAJIB, JANGAN UPLOAD DARI LOKAL)
+---------------------------------------------------------------------
+  npm ci
+  npm run build
+
+Kenapa harus build ulang di server?
+File public/build hasil build lokal masih menunjuk ke
+127.0.0.1:8081 (Reverb lokal) -> chat realtime MATI di server.
+Setelah .env benar, hasil build di server otomatis pakai
+wss://domainmu.id
+
+
+---------------------------------------------------------------------
+LANGKAH 4 - NGINX VHOST (DOCROOT HARUS KE FOLDER public/)
+---------------------------------------------------------------------
+Server block nginx, contoh:
+
+  root /var/www/nds-website/public;   # BUKAN root project!
+
+  location / {
+      try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  # WebSocket Reverb (wss)
+  location /app/ {
+      proxy_pass http://127.0.0.1:8081;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host $host;
+  }
+
+Lalu pasang SSL (https wajib karena Reverb pakai wss):
+
+  sudo apt install certbot python3-certbot-nginx
+  sudo certbot --nginx -d domainmu.id
+
+Catatan: trustProxies sudah diset '*' di bootstrap/app.php,
+tidak perlu diubah.
+
+
+---------------------------------------------------------------------
+LANGKAH 5 - SUPERVISOR: QUEUE WORKER + REVERB (PROSES PERMANEN)
+---------------------------------------------------------------------
+Tanpa dua proses ini: chat TIDAK realtime (broadcast lewat queue)
+dan Reverb tidak mendengarkan koneksi.
+
+File: /etc/supervisor/conf.d/nds-worker.conf
+---------------------------------------------------------------
+[program:nds-worker]
+command=php /var/www/nds-website/artisan queue:work --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=www-data
+stdout_logfile=/var/www/nds-website/storage/logs/worker.log
+---------------------------------------------------------------
+
+File: /etc/supervisor/conf.d/nds-reverb.conf
+---------------------------------------------------------------
+[program:nds-reverb]
+command=php /var/www/nds-website/artisan reverb:start --host=127.0.0.1 --port=8081
+autostart=true
+autorestart=true
+user=www-data
+stdout_logfile=/var/www/nds-website/storage/logs/reverb.log
+---------------------------------------------------------------
+
+Aktifkan:
+
+  sudo supervisorctl reread
+  sudo supervisorctl update
+  sudo supervisorctl start all
+
+
+---------------------------------------------------------------------
+LANGKAH 6 - CRON SCHEDULER (UNTUK tawk:sync)
+---------------------------------------------------------------------
+  crontab -e
+
+Tambahkan baris:
+
+  * * * * * cd /var/www/nds-website && php artisan schedule:run >> /dev/null 2>&1
+
+
+---------------------------------------------------------------------
+LANGKAH 7 - CACHE PRODUKSI + VERIFIKASI AKHIR
+---------------------------------------------------------------------
+Cache:
+
+  php artisan config:cache
+  php artisan route:cache
+  php artisan view:cache
+
+Verifikasi:
+1. Buka https://domainmu.id/up  -> harus OK (health check)
+2. Login admin, buka chat -> DevTools (F12) tab Network -> WS,
+   harus konek ke wss://domainmu.id/app/...
+3. Kirim pesan test antar dua browser -> pesan masuk realtime,
+   status Delivered/Read jalan (artinya queue worker + Reverb hidup)
+4. Cek log kalau ada error:
+   storage/logs/laravel.log
+   storage/logs/worker.log
+   storage/logs/reverb.log
+
+
+---------------------------------------------------------------------
+RINGKASAN URUTAN (COPY-PASTE KE SERVER)
+---------------------------------------------------------------------
+  cd /var/www/nds-website
+  cp .env.example .env          # lalu edit (Langkah 1)
+  composer install --no-dev --optimize-autoloader
+  php artisan key:generate
+  php artisan migrate --seed    # atau import dump SQL
+  php artisan storage:link
+  chmod -R 775 storage bootstrap/cache
+  npm ci
+  npm run build
+  # setup nginx + SSL (Langkah 4)
+  # setup supervisor (Langkah 5)
+  # setup cron (Langkah 6)
+  php artisan config:cache
+  php artisan route:cache
+  php artisan view:cache
+=====================================================================

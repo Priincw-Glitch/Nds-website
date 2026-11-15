@@ -1,0 +1,410 @@
+{
+  "project": "NDS-WEBSITE",
+  "generated_at": "2026-11-06",
+  "project_path": "D:\\laragon\\www\\NDS-WEBSITE",
+  "summary": {
+    "total_source_files": 226,
+    "php_files": 87,
+    "tsx_files": 115,
+    "ts_files": 16,
+    "css_files": 1,
+    "blade_files": 2,
+    "json_config_files": 8,
+    "migration_files": 30,
+    "seeder_files": 2,
+    "factory_files": 1
+  },
+  "technology_stack": {
+    "backend": {
+      "framework": "Laravel 12.x",
+      "php_version": "^8.2",
+      "key_packages": {
+        "inertiajs/inertia-laravel": "^3.5",
+        "laravel/reverb": "^1.12",
+        "laravel/tinker": "^2.10.1",
+        "tightenco/ziggy": "^2.6"
+      }
+    },
+    "frontend": {
+      "framework": "React 19.3.1",
+      "language": "TypeScript 7.0.2",
+      "bridge": "@inertiajs/react 3.9.1",
+      "styling": "Tailwind CSS 4.0",
+      "ui_library": "Radix UI primitives",
+      "animation": ["GSAP 3.15", "Lenis 1.3.27", "Framer Motion 14.8"],
+      "build_tool": "Vite 6.0.11",
+      "key_packages": {
+        "@radix-ui/react-accordion": "^1.3.1",
+        "@radix-ui/react-dialog": "^1.3.1",
+        "@radix-ui/react-dropdown-menu": "^2.2.1",
+        "@radix-ui/react-popover": "^1.3.1",
+        "@radix-ui/react-select": "^2.4.1",
+        "@radix-ui/react-slot": "^1.5.0",
+        "@radix-ui/react-tabs": "^1.2.1",
+        "@radix-ui/react-tooltip": "^1.4.1",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "gsap": "^3.15.0",
+        "laravel-echo": "^2.6.1",
+        "lenis": "^1.3.27",
+        "lucide-react": "^1.60.0",
+        "motion": "^14.8.0",
+        "pusher-js": "^8.6.0",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "swiper": "^14.3.0",
+        "tailwind-merge": "^3.7.0",
+        "ziggy-js": "^2.6.5"
+      }
+    },
+    "database": {
+      "development": "SQLite",
+      "production_ready": ["MySQL", "PostgreSQL"],
+      "orm": "Eloquent"
+    },
+    "real_time": {
+      "server": "Laravel Reverb 1.12",
+      "client": "Pusher JS 8.6 + Laravel Echo 2.6"
+    },
+    "external_integrations": {
+      "tawk_to": "Chat widget + webhook",
+      "email": "SMTP (Gmail App Password ready)",
+      "file_storage": "Local / S3 ready"
+    }
+  },
+  "directory_structure": {
+    "app": {
+      "Console": { "Commands": ["TawkSync.php"] },
+      "Events": ["SettingsUpdated.php", "TawkChatReceived.php", "TicketConversationUpdated.php", "TicketMessageSent.php", "TicketMessagesRead.php", "TicketTyping.php"],
+      "Http": {
+        "Controllers": {
+          "Admin": [
+            "ArticleAdminController.php",
+            "ArticleCategoryAdminController.php",
+            "CoverageAdminController.php",
+            "CustomerManagementController.php",
+            "CustomerServiceManagementController.php",
+            "DashboardController.php",
+            "MessageAdminController.php",
+            "ProfileAdminController.php",
+            "ProjectAdminController.php",
+            "PromoAdminController.php",
+            "PromoCategoryAdminController.php",
+            "ServiceAdminController.php",
+            "ServiceCategoryAdminController.php",
+            "SettingAdminController.php",
+            "SupportTicketManagementController.php"
+          ],
+          "Customer": [
+            "CustomerAuthController.php",
+            "CustomerDashboardController.php",
+            "CustomerNotificationController.php",
+            "CustomerProfileController.php",
+            "CustomerPromoController.php",
+            "CustomerServiceController.php",
+            "SupportTicketController.php"
+          ],
+          "root": [
+            "AuthController.php",
+            "BlogController.php",
+            "ContactController.php",
+            "Controller.php",
+            "CoverageController.php",
+            "HomeController.php",
+            "PasswordResetController.php",
+            "PromoController.php",
+            "ServiceController.php",
+            "TawkWebhookController.php"
+          ]
+        },
+        "Middleware": [
+          "Authenticate.php",
+          "EnsureCustomerIsActive.php",
+          "EnsureUserIsAdmin.php",
+          "HandleInertiaRequests.php",
+          "SecurityHeaders.php"
+        ],
+        "Requests": [
+          "StoreArticleRequest.php",
+          "StoreCategoryRequest.php",
+          "StoreContactRequest.php",
+          "StoreProjectRequest.php",
+          "StorePromoRequest.php",
+          "StoreServiceRequest.php",
+          "UpdatePromoRequest.php"
+        ]
+      },
+      "Models": [
+        "ActivityLog.php",
+        "Article.php",
+        "ArticleCategory.php",
+        "CompanySetting.php",
+        "ContactMessage.php",
+        "CustomerProfile.php",
+        "CustomerRegistration.php",
+        "CustomerService.php",
+        "Notification.php",
+        "Project.php",
+        "Promo.php",
+        "PromoCategory.php",
+        "PromoPurchase.php",
+        "Service.php",
+        "ServiceCategory.php",
+        "ServiceCoverage.php",
+        "Settings.php",
+        "SupportTicket.php",
+        "TicketAttachment.php",
+        "TicketMessage.php",
+        "User.php"
+      ],
+      "Providers": ["AppServiceProvider.php"],
+      "Services": ["TawkService.php"]
+    },
+    "bootstrap": ["app.php", "providers.php", "cache/"],
+    "config": [
+      "app.php", "auth.php", "broadcasting.php", "cache.php",
+      "database.php", "filesystems.php", "logging.php", "mail.php",
+      "queue.php", "reverb.php", "services.php", "session.php", "tawk.php"
+    ],
+    "database": {
+      "factories": ["UserFactory.php"],
+      "migrations": 30,
+      "seeders": ["AdminUserSeeder.php", "DatabaseSeeder.php"],
+      "files": ["database.sqlite", "nds_website.sql", "setup_layout_size_column.php"]
+    },
+    "lang": {
+      "id": ["auth.php", "passwords.php", "validation.php"]
+    },
+    "public": {
+      "build": { "assets": "100+ chunks", "manifest.json": true },
+      "images": {
+        "root": ["hero-bg.jpg", "logo.png", "logo-scrolled.png"],
+        "services": ["cctv.jpg", "default.jpg", "it-consultant.jpg", "management-network.jpg", "server-management.jpg", "service-landscape.jpg", "software-application.jpg", "web-development.jpg"]
+      },
+      "root_files": [".htaccess", "favicon.ico", "index.php", "robots.txt"]
+    },
+    "resources": {
+      "css": ["app.css"],
+      "js": {
+        "Components": {
+          "root": [
+            "ArticleCard.tsx", "CoverageCheckSection.tsx", "Footer.tsx",
+            "Navbar.tsx", "PromoCard.tsx", "PromoDetailModal.tsx",
+            "PromoImageCard.tsx", "SectionHeading.tsx", "Seo.tsx",
+            "ServiceCard.tsx", "ServiceIcon.tsx", "ServiceImageCard.tsx",
+            "ServicesSection.tsx", "ServiceTargetsSection.tsx"
+          ],
+          "admin": ["DeleteButton.tsx", "Pagination.tsx"],
+          "customer": ["SupportComposer.tsx"],
+          "support": ["ConversationList.tsx", "SupportChat.tsx", "types.ts", "useTicketRealtime.ts"],
+          "ui": [
+            "accordion.tsx", "button.tsx", "card.tsx", "CenteredCardCarousel.tsx",
+            "ContentSlider.tsx", "dialog.tsx", "dropdown-menu.tsx", "input.tsx",
+            "label.tsx", "select.tsx", "Spotlight.tsx", "tabs.tsx",
+            "textarea.tsx", "tooltip.tsx"
+          ]
+        },
+        "hooks": ["useGsap.ts", "useLenis.ts", "useSettingsListener.ts", "useTawkMessagesListener.ts"],
+        "Layouts": ["AdminLayout.tsx", "CustomerLayout.tsx", "FrontendLayout.tsx"],
+        "lib": ["utils.ts"],
+        "Pages": {
+          "root": [
+            "About.tsx", "Blog.tsx", "BlogDetail.tsx", "Contact.tsx",
+            "Home.tsx", "Login.tsx", "NotFound.tsx", "Privacy.tsx",
+            "Promo.tsx", "ServiceDetail.tsx", "ServicesIndex.tsx"
+          ],
+          "Admin": {
+            "Dashboard.tsx": true,
+            "Articles": ["Form.tsx", "Index.tsx"],
+            "ArticleCategories": ["Index.tsx"],
+            "Coverages": ["Index.tsx"],
+            "Customers": ["Create.tsx", "Index.tsx", "Registrations.tsx", "Show.tsx"],
+            "CustomerServices": ["Create.tsx", "Edit.tsx", "fields.tsx", "Index.tsx"],
+            "Messages": ["Index.tsx", "Show.tsx"],
+            "Profile": ["Edit.tsx"],
+            "Projects": ["Form.tsx", "Index.tsx"],
+            "Promos": ["Form.tsx", "Index.tsx"],
+            "ServiceCategories": ["Index.tsx"],
+            "Services": ["Form.tsx", "Index.tsx"],
+            "Settings": ["Edit.tsx"],
+            "Support": ["Index.tsx", "Show.tsx"]
+          },
+          "Auth": ["ForgotPassword.tsx", "ResetPassword.tsx"],
+          "Customer": {
+            "Dashboard.tsx": true,
+            "MyPromo.tsx": true,
+            "Notifications.tsx": true,
+            "Profile.tsx": true,
+            "Register.tsx": true,
+            "RegisterSuccess.tsx": true,
+            "Services": ["Index.tsx", "Show.tsx"],
+            "Support": ["Create.tsx", "Index.tsx", "Show.tsx"]
+          }
+        },
+        "types": ["index.ts", "ziggy.d.ts"],
+        "utils": ["layout.tsx"],
+        "root": ["app.tsx", "echo.ts"]
+      },
+      "views": ["app.blade.php", "welcome.blade.php"]
+    },
+    "routes": ["web.php", "channels.php", "console.php"],
+    "storage": ["app/", "framework/", "inertia-devtools/", "logs/"],
+    "tests": [],
+    "tools": ["analyze_css.ps1", "analyze_css2.ps1"],
+    "root_files": [
+      ".editorconfig", ".env", ".env.backup-chat-20261103", ".env.example",
+      ".gitattributes", ".gitignore", ".phpunit.result.cache", "AGENTS.md",
+      "all_responsiveness_report.json", "antislop.md", "artisan",
+      "audit_results.json", "audit_routes.php", "check_data.php",
+      "composer.json", "composer.lock", "cookies.txt",
+      "CUSTOMER_PORTAL_COMPLETE.md", "CUSTOMER_PORTAL_GUIDE.md",
+      "DESIGN.md", "findstr", "fix-mail-password.php", "GEMINI.md",
+      "login-debug.html", "NAVBAR-IMPLEMENTATION.md", "npm",
+      "package-lock.json", "package.json", "phpunit.xml",
+      "README.md", "responsiveness_results.json", "skills-lock.json",
+      "TAWK_AI_PROMPT.md", "test-mail.php", "test_all_responsiveness.cjs",
+      "test_quick_fix.cjs", "test_responsiveness.cjs", "test_runner_full.cjs",
+      "tsconfig.json", "vite.config.ts"
+    ]
+  },
+  "key_models": [
+    "User", "Service", "ServiceCategory", "ServiceCoverage",
+    "Promo", "PromoCategory", "PromoPurchase",
+    "Article", "ArticleCategory", "Project",
+    "ContactMessage", "CustomerProfile", "CustomerRegistration",
+    "CustomerService", "SupportTicket", "TicketMessage",
+    "TicketAttachment", "Notification", "ActivityLog",
+    "CompanySetting", "Settings"
+  ],
+  "key_relationships": {
+    "User": {
+      "hasOne": ["CustomerProfile"],
+      "hasMany": ["CustomerService", "CustomerRegistration", "PromoPurchase", "SupportTicket", "TicketMessage", "Notification", "ActivityLog"]
+    },
+    "Service": {
+      "belongsTo": ["ServiceCategory"],
+      "hasMany": ["CustomerService", "CustomerRegistration", "ServiceCoverage"]
+    },
+    "Promo": {
+      "belongsTo": ["PromoCategory"]
+    },
+    "Article": {
+      "belongsTo": ["ArticleCategory"]
+    },
+    "SupportTicket": {
+      "belongsTo": ["User (customer)", "CustomerService", "User (assigned_to)"],
+      "hasMany": ["TicketMessage"],
+      "hasOne": ["TicketMessage (latestMessage)"]
+    },
+    "TicketMessage": {
+      "belongsTo": ["SupportTicket", "User"],
+      "hasMany": ["TicketAttachment"]
+    }
+  },
+  "modules": {
+    "public": [
+      "Homepage", "About", "Services (Index + Detail)", "Coverage Check",
+      "Promo (Index + Modal)", "Blog (Index + Detail)", "Contact",
+      "Privacy Policy", "Login", "Password Reset"
+    ],
+    "admin": [
+      "Dashboard", "Services CRUD", "Service Categories CRUD",
+      "Coverages CRUD", "Promos CRUD (complex)", "Promo Categories CRUD",
+      "Articles CRUD", "Article Categories CRUD", "Projects CRUD",
+      "Messages Management", "Settings (30+ keys)", "Profile",
+      "Customer Management", "Customer Services Management",
+      "Support Tickets (with realtime chat)"
+    ],
+    "customer": [
+      "Dashboard", "My Promos", "Profile (avatar + password)",
+      "Notifications", "My Services", "Support Chat (realtime)"
+    ]
+  },
+  "database_tables": 27,
+  "migrations_count": 30,
+  "assets": {
+    "images": {
+      "hero_bg": "hero-bg.jpg (217 KB)",
+      "logos": ["logo.png (112 KB)", "logo-scrolled.png (81 KB)"],
+      "services": 8
+    },
+    "build_assets": "100+ chunks in public/build/assets/",
+    "main_bundles": {
+      "app_js": "~463 KB",
+      "app_css": "~128 KB",
+      "layout_js": "~168 KB",
+      "react_vendor_js": "~143 KB"
+    }
+  },
+  "security_findings": {
+    "good_practices": [
+      "Role-based middleware (EnsureUserIsAdmin, EnsureCustomerIsActive)",
+      "Throttle on sensitive routes (login, contact, password reset, webhook)",
+      "HMAC verification on Tawk.to webhook",
+      "SecurityHeaders middleware (CSP, HSTS, X-Frame-Options, etc)",
+      "Password hashing via casts",
+      "Mass assignment protection via $fillable",
+      "CSRF protection via Inertia",
+      "SQL injection protection via Eloquent"
+    ],
+    "needs_attention": [
+      "APP_DEBUG may be true in .env (production)",
+      "SESSION_ENCRYPT=false (should be true in production)",
+      "Default SQLite database (not production-ready)",
+      "CSP policy needs audit for Inertia + Vite + Reverb",
+      "File upload validation needs review in Request classes",
+      "Tawk webhook secret and Reverb credentials rotation needed",
+      "welcome.blade.php (82 KB) accessible? Unused file"
+    ],
+    "sensitive_files_not_to_commit": [
+      ".env", "database/database.sqlite", "storage/logs/*.log"
+    ]
+  },
+  "files_needing_review": {
+    "potential_duplicates": [
+      "app/Models/Settings.php vs app/Models/CompanySetting.php",
+      "database/migrations/2026_10_21_095323_create_settings_table.php (legacy settings table)",
+      "public images/ vs public/images/ (possible duplicate folder)"
+    ],
+    "unused_legacy": [
+      "resources/views/welcome.blade.php (82 KB, default Laravel, unused)",
+      "app/Models/Settings.php (likely legacy)",
+      "database/migrations/2026_10_21_095323_create_settings_table.php"
+    ],
+    "test_artifacts_in_root": [
+      "all_responsiveness_report.json", "audit_results.json",
+      "audit_routes.php", "check_data.php", "login-debug.html",
+      "responsiveness_results.json", "test_all_responsiveness.cjs",
+      "test_quick_fix.cjs", "test_responsiveness.cjs", "test_runner_full.cjs",
+      "fix-mail-password.php", "test-mail.php", "cookies.txt",
+      "findstr (empty)", "npm (empty)"
+    ],
+    "large_files": [
+      "database/database.sqlite (86 MB)",
+      "database/nds_website.sql (78 MB)",
+      "resources/views/welcome.blade.php (82 KB)",
+      "composer.lock (351 KB)",
+      "package-lock.json (195 KB)"
+    ],
+    "potentially_unused_deps": [
+      "motion (framer-motion) - GSAP + Lenis already used",
+      "@icons-pack/react-simple-icons - Lucide covers UI icons",
+      "axios - Inertia handles requests",
+      "concurrently - only for composer dev script"
+    ]
+  },
+  "production_readiness_checklist": {
+    "APP_KEY_generated": "unknown",
+    "APP_DEBUG_false": "unknown",
+    "DB_MySQL_PostgreSQL": "false (SQLite default)",
+    "SESSION_ENCRYPT_true": "false",
+    "HTTPS_enforced": "unknown",
+    "CSP_tested": "false",
+    "File_upload_validation": "needs_review",
+    "Rate_limiting": "configured",
+    "Reverb_credentials_rotated": "unknown",
+    "Tawk_secret_rotated": "unknown",
+    "Backup_strategy": "unknown",
+    "Monitoring_Logging": "partial (laravel/pail installed)"
+  }
+}

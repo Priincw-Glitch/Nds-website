@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ilustrasi inti jaringan berlapis">
+  <title>Inti jaringan NDS</title>
+
+  <!-- Bayangan lembut di bawah setiap blok -->
+  <ellipse cx="256" cy="394" rx="140" ry="22" fill="#10264A" opacity="0.06"/>
+  <ellipse cx="404" cy="168" rx="50" ry="9" fill="#10264A" opacity="0.05"/>
+  <ellipse cx="104" cy="292" rx="44" ry="8" fill="#10264A" opacity="0.05"/>
+  <ellipse cx="372" cy="390" rx="36" ry="7" fill="#10264A" opacity="0.04"/>
+
+  <!-- Orbit halus mengelilingi inti -->
+  <ellipse cx="256" cy="240" rx="212" ry="92" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="3 7" stroke-linecap="round" opacity="0.3"/>
+  <circle cx="44" cy="240" r="4" fill="#2563EB" opacity="0.55"/>
+  <circle cx="468" cy="240" r="4" fill="#2563EB" opacity="0.55"/>
+
+  <!-- Koneksi node ke satelit -->
+  <g stroke="#2563EB" stroke-width="1.5" stroke-linecap="round" opacity="0.5">
+    <line x1="360" y1="130" x2="386" y2="148"/>
+    <line x1="146" y1="216" x2="128" y2="192"/>
+    <line x1="340" y1="326" x2="362" y2="290"/>
+  </g>
+  <g fill="#2563EB" opacity="0.6">
+    <circle cx="386" cy="148" r="2.5"/>
+    <circle cx="128" cy="192" r="2.5"/>
+    <circle cx="362" cy="290" r="2.5"/>
+  </g>
+
+  <!-- Satelit kanan-atas -->
+  <g>
+    <polygon points="360,88 404,112 404,156 360,132" fill="#16336E"/>
+    <polygon points="448,88 404,112 404,156 448,132" fill="#2563EB"/>
+    <polygon points="404,64 448,88 404,112 360,88" fill="#5B8DFF"/>
+  </g>
+
+  <!-- Satelit kiri (versi terang) -->
+  <g>
+    <polygon points="64,218 104,240 104,280 64,258" fill="#6FA0FF"/>
+    <polygon points="144,218 104,240 104,280 144,258" fill="#AFC9F7"/>
+    <polygon points="104,196 144,218 104,240 64,218" fill="#EAF1FF"/>
+  </g>
+
+  <!-- Satelit kanan-bawah -->
+  <g>
+    <polygon points="338,328 372,346 372,380 338,362" fill="#10264A"/>
+    <polygon points="406,328 372,346 372,380 406,362" fill="#1D4ED8"/>
+    <polygon points="372,310 406,328 372,346 338,328" fill="#3E77F6"/>
+  </g>
+
+  <!-- Inti utama -->
+  <g>
+    <polygon points="138,160 256,224 256,342 138,278" fill="#16336E"/>
+    <polygon points="374,160 256,224 256,342 374,278" fill="#2563EB"/>
+    <polygon points="256,96 374,160 256,224 138,160" fill="#3E77F6"/>
+    <polygon points="256,114 342,160 256,206 170,160" fill="#EAF1FF"/>
+  </g>
+
+  <!-- Aksen titik dan tanda plus yang jarang -->
+  <g stroke="#2563EB" stroke-width="1.5" stroke-linecap="round" opacity="0.35">
+    <path d="M80 116 h8 M84 112 v8"/>
+    <path d="M448 232 h8 M452 228 v8"/>
+    <path d="M204 48 h8 M208 44 v8"/>
+  </g>
+  <circle cx="150" cy="86" r="2.5" fill="#2563EB" opacity="0.4"/>
+  <circle cx="430" cy="380" r="2.5" fill="#2563EB" opacity="0.35"/>
+</svg>

@@ -1,0 +1,1257 @@
+@import "tailwindcss";
+
+@theme {
+    /*
+     * Design System Warna NDS (Nusantara Digital Solution):
+     * - Navy (navy)        : #10264A - warna utama untuk heading dan aksen utama
+     * - Deep Navy (deep-navy) : #0B1730 - warna gelap untuk overlay
+     * - Electric Blue (electric-blue) : #2563EB - warna aksen tekstil
+     * - Light Blue (light-blue) : #EAF1FF - warna belakang ringan
+     * - White: #FFFFFF
+     * - Off White: #F6F8FC
+     *
+     * Warna lama yang diganti:
+     * - primary / navy (lama #0b1f44) -> sekarang #10264A
+     * - tech-blue -> electric-blue (#2563EB)
+     */
+    --color-primary: #0B1730;
+    --color-primary-hover: #0B1730;
+    --color-navy: #10264A;
+    --color-navy-dark: #0B1730;
+    --color-deep-navy: #0B1730;
+    --color-secondary: #2563EB;
+    --color-secondary-hover: #1D4ED8;
+    --color-tech-blue: #2563EB;
+    --color-tech-blue-hover: #1D4ED8;
+    --color-electric-blue: #2563EB;
+    --color-electric-blue-hover: #1D4ED8;
+    --color-electric-light: #EAF1FF;
+    --color-accent: #e52532;
+    --color-accent-hover: #c41e29;
+    --color-crimson: #e52532;
+    --color-crimson-dark: #c41e29;
+    --color-light-gray: #f6f8fc;
+    --color-light-blue: #EAF1FF;
+    --color-surface-secondary: #EAF1FF;
+    --color-surface-muted: #f1f5f9;
+    --color-body-text: #475569;
+    --color-body-dark: #0f172a;
+    --color-border-soft: #e2e8f0;
+    --color-border-strong: #cbd5e1;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-danger-dark: #b91c1c;
+
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    --shadow-subtle: 0 1px 3px 0 rgba(11, 31, 68, 0.04);
+    --shadow-card: 0 4px 20px -2px rgba(11, 31, 68, 0.06);
+    --shadow-card-hover: 0 16px 36px -6px rgba(11, 31, 68, 0.12);
+    --shadow-dropdown: 0 20px 48px -8px rgba(11, 31, 68, 0.16);
+}
+
+@layer base {
+    :root {
+        --color-bg: #ffffff;
+        --color-surface: #ffffff;
+
+        /* Lapisan UI publik: konten 0-10, navbar fixed 50, lalu popover yang
+           dirender lewat portal di 60. Dropdown memakai token ini, bukan
+           angka z-index yang ditebak di tiap komponen. */
+        --layer-dropdown: 60;
+    }
+
+    /* Kontrol native (checkbox/radio) mengikuti aksen Electric Blue,
+        bukan warna default sistem operasi. */
+    input[type="checkbox"],
+    input[type="radio"] {
+        accent-color: var(--color-tech-blue);
+    }
+
+    html {
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+        /* Fallback tema untuk halaman yang tidak menyembunyikan scrollbar
+           (panel admin/customer): track transparan, thumb slate tipis. */
+        scrollbar-color: rgba(71, 85, 105, 0.55) transparent;
+        scrollbar-width: thin;
+    }
+
+    /* Situs publik: scrollbar halaman disembunyikan sepenuhnya agar tepi
+       kanan section gelap bersih tanpa garis track terang bawaan browser.
+       Pengguliran tetap berfungsi penuh (roda, sentuh, keyboard). */
+    .hide-page-scrollbar {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .hide-page-scrollbar::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    body {
+        color: var(--color-body-text);
+        background-color: #ffffff;
+        overflow-x: hidden;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    ::selection {
+        background-color: var(--color-navy);
+        color: #ffffff;
+    }
+}
+
+/* ==========================================================================
+   CONTAINERS & TYPOGRAPHY
+   ========================================================================== */
+
+@utility container-nds {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 78rem;
+    padding-inline: 1.25rem;
+
+    @media (min-width: 480px) {
+        padding-inline: 2rem;
+    }
+    @media (min-width: 640px) {
+        padding-inline: 2rem;
+    }
+    @media (min-width: 1024px) {
+        padding-inline: 2.5rem;
+    }
+    @media (min-width: 1280px) {
+        padding-inline: 2.5rem;
+    }
+}
+
+@utility heading-1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--color-navy);
+
+    @media (min-width: 640px) {
+        font-size: 3rem;
+    }
+
+    @media (min-width: 1024px) {
+        font-size: 3.75rem;
+    }
+}
+
+@utility heading-2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--color-navy);
+
+    @media (min-width: 640px) {
+        font-size: 2.25rem;
+    }
+}
+
+@utility heading-3 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: var(--color-navy);
+
+    @media (min-width: 640px) {
+        font-size: 1.5rem;
+    }
+}
+
+@utility hero-title {
+    font-size: clamp(2.25rem, 4vw + 0.9rem, 3.75rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+@utility heading-4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-navy);
+}
+
+/*
+ * Kelas komponen dibungkus @layer components agar utility Tailwind (pl-10,
+ * py-2, text-xs, dsb.) selalu bisa mengoverride padding/warna dasar komponen.
+ * Tanpa layer, CSS biasa secara cascade mengalahkan utility dan menyebabkan
+ * ikon search menimpa teks serta ukuran tombol toolbar tidak berubah.
+ */
+@layer components {
+/* ==========================================================================
+   BUTTONS (Design System NDS)
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.btn:disabled,
+.btn[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/*
+ * Hover bahasa visual (satu keluarga): primary/CTA solid tech-blue dengan
+ * hover selangkah lebih dalam (varian hover token yang sudah ada); tombol
+ * outlined/ghost transparan tetap warna halaman, hover-nya tint electric;
+ * danger tetap ghost merah sebagai penanda tindakan berbahaya.
+ */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    background-color: var(--color-tech-blue);
+    color: #ffffff;
+    border: 1px solid transparent;
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-tech-blue-hover);
+}
+
+.btn-primary:active {
+    background-color: var(--color-tech-blue-hover);
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    border: 1px solid var(--color-border-soft);
+    background-color: #ffffff;
+    color: var(--color-navy);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-border-strong);
+    background-color: rgba(22, 119, 210, 0.06);
+}
+
+.btn-secondary:active {
+    background-color: rgba(22, 119, 210, 0.12);
+    transform: scale(0.98);
+}
+
+.btn-navy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    background-color: var(--color-navy);
+    color: #ffffff;
+    border: 1px solid transparent;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.2s ease, transform 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-navy:hover {
+    background-color: rgba(11, 31, 68, 0.85);
+    border-color: rgba(11, 31, 68, 0.4);
+    backdrop-filter: blur(6px);
+}
+
+.btn-navy:active {
+    background-color: rgba(11, 31, 68, 0.92);
+    transform: scale(0.98);
+}
+
+.btn-outline-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    backdrop-filter: blur(4px);
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-outline-light:hover {
+    border-color: rgba(77, 166, 248, 0.5);
+    color: #ffffff;
+    background-color: rgba(77, 166, 248, 0.14);
+}
+
+.btn-outline-light:active {
+    background-color: rgba(77, 166, 248, 0.2);
+    transform: scale(0.98);
+}
+
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: transparent;
+    color: var(--color-body-text);
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-ghost:hover {
+    background-color: rgba(22, 119, 210, 0.07);
+    color: var(--color-tech-blue-hover);
+}
+
+.btn-ghost:active {
+    background-color: rgba(22, 119, 210, 0.12);
+    transform: scale(0.98);
+}
+
+.btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    background-color: transparent;
+    color: var(--color-danger-dark);
+    border: 1px solid var(--color-danger);
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.2s ease, transform 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: rgba(239, 68, 68, 0.12);
+    backdrop-filter: blur(10px);
+}
+
+.btn-danger:active {
+    background-color: rgba(239, 68, 68, 0.2);
+    transform: scale(0.98);
+}
+
+/* ==========================================================================
+   ADMIN DATA TABLE
+   ========================================================================== */
+
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 1rem;
+    border: 1px solid var(--color-border-soft);
+    background-color: #ffffff;
+    box-shadow: var(--shadow-subtle);
+}
+
+.table-modern {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table-modern thead th {
+    padding: 0.75rem 1.25rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-body-text);
+    background-color: var(--color-surface-secondary);
+    border-bottom: 1px solid var(--color-border-soft);
+}
+
+.table-modern thead th.text-right {
+    text-align: right;
+}
+
+.table-modern tbody td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--color-border-soft);
+    color: var(--color-body-text);
+}
+
+.table-modern tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-modern tbody tr:hover {
+    background-color: rgba(22, 119, 210, 0.03);
+}
+
+/* ==========================================================================
+   CARDS & PANELS
+   ========================================================================== */
+
+.card {
+    border-radius: 0.875rem;
+    border: 1px solid var(--color-border-soft);
+    background-color: #ffffff;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(11, 31, 68, 0.04);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover {
+    border-radius: 0.875rem;
+    border: 1px solid var(--color-border-soft);
+    background-color: #ffffff;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(11, 31, 68, 0.04);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover:hover {
+    transform: translateY(-3px);
+    border-color: rgba(22, 119, 210, 0.4);
+    box-shadow: 0 16px 36px -6px rgba(11, 31, 68, 0.1);
+}
+
+.card-tile {
+    border-radius: 0.875rem;
+    border: 1px solid var(--color-border-soft);
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px 0 rgba(11, 31, 68, 0.04);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-tile:hover {
+    transform: translateY(-3px);
+    border-color: rgba(22, 119, 210, 0.4);
+    box-shadow: 0 16px 36px -6px rgba(11, 31, 68, 0.1);
+}
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+
+.input {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border-soft);
+    background-color: #ffffff;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--color-body-dark);
+    box-shadow: 0 1px 2px 0 rgba(11, 31, 68, 0.02);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+    color: #64748b;
+}
+
+.input:focus {
+    border-color: var(--color-tech-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(22, 119, 210, 0.15);
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.form-hint {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-body-text);
+}
+
+.form-error {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #dc2626;
+}
+
+/* ==========================================================================
+   RICH TEXT EDITOR (konten halaman statis)
+   ========================================================================== */
+
+.rich-editor-content {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-body-text);
+}
+
+.rich-editor-content p + p {
+    margin-top: 0.75rem;
+}
+
+.rich-editor-content h2 {
+    margin: 1.5rem 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-navy);
+}
+
+.rich-editor-content h2:first-child {
+    margin-top: 0;
+}
+
+.rich-editor-content h3 {
+    margin: 1.25rem 0 0.375rem;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-navy);
+}
+
+.rich-editor-content ul,
+.rich-editor-content ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.rich-editor-content ul {
+    list-style: disc;
+}
+
+.rich-editor-content ol {
+    list-style: decimal;
+}
+
+.rich-editor-content li + li {
+    margin-top: 0.25rem;
+}
+
+.rich-editor-content blockquote {
+    margin: 0.75rem 0;
+    border-left: 3px solid var(--color-tech-blue);
+    padding-left: 0.875rem;
+    color: var(--color-navy);
+    font-style: italic;
+}
+
+.rich-editor-content hr {
+    margin: 1.25rem 0;
+    border: 0;
+    border-top: 1px solid var(--color-border-soft);
+}
+
+.rich-editor-content a {
+    color: var(--color-tech-blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.rich-editor-content strong {
+    color: var(--color-navy);
+}
+
+/* ==========================================================================
+   BADGES (WCAG AA Compliant)
+   ========================================================================== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.2rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1rem;
+}
+
+.badge-primary {
+    background-color: rgba(11, 31, 68, 0.08);
+    color: var(--color-navy);
+    border: 1px solid rgba(11, 31, 68, 0.15);
+}
+
+.badge-secondary {
+    background-color: rgba(22, 119, 210, 0.08);
+    color: var(--color-tech-blue);
+    border: 1px solid rgba(22, 119, 210, 0.2);
+}
+
+.badge-crimson {
+    background-color: rgba(229, 37, 50, 0.08);
+    color: var(--color-crimson);
+    border: 1px solid rgba(229, 37, 50, 0.25);
+}
+
+.badge-success {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.badge-warning {
+    background-color: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.badge-danger {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.badge-neutral {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & FOCUS
+   ========================================================================== */
+
+.btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-navy:focus-visible,
+.btn-ghost:focus-visible,
+.btn-outline-light:focus-visible,
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--color-tech-blue);
+    outline-offset: 2px;
+}
+}
+
+.text-balance {
+    text-wrap: balance;
+}
+
+.gsap-reveal {
+    opacity: 0;
+}
+
+/* Halaman Tentang Kami: HTML dari Admin Panel (paragraf, sub-judul, daftar,
+   tautan) mengikuti tipografi editorial halaman tanpa plugin typography. */
+.about-copy > * + * {
+    margin-top: 1.25rem;
+}
+
+.about-copy p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-body-text);
+}
+
+.about-copy h2,
+.about-copy h3 {
+    color: var(--color-navy);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.about-copy h2 {
+    font-size: 1.25rem;
+}
+
+.about-copy h3 {
+    font-size: 1.0625rem;
+}
+
+.about-copy ul,
+.about-copy ol {
+    padding-left: 1.25rem;
+}
+
+.about-copy ul {
+    list-style: disc;
+}
+
+.about-copy ol {
+    list-style: decimal;
+}
+
+.about-copy li + li {
+    margin-top: 0.5rem;
+}
+
+.about-copy li {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-body-text);
+}
+
+.about-copy a {
+    color: var(--color-tech-blue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (min-width: 640px) {
+    .about-copy p,
+    .about-copy li {
+        font-size: 1.0625rem;
+    }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ==========================================================================
+   ACETERNITY / TECH VISUAL UTILITIES
+   ========================================================================== */
+
+.tech-grid-pattern {
+    background-size: 32px 32px;
+    background-image: 
+        linear-gradient(to right, rgba(11, 31, 68, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(11, 31, 68, 0.035) 1px, transparent 1px);
+}
+
+.tech-grid-pattern-dark {
+    background-size: 36px 36px;
+    background-image: 
+        linear-gradient(to right, rgba(77, 166, 248, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(77, 166, 248, 0.07) 1px, transparent 1px);
+}
+
+/* ==========================================================================
+   COLOR UTILITIES
+   ========================================================================== */
+
+.bg-off-white {
+    background-color: #f6f8fc;
+}
+
+.bg-light-blue {
+    background-color: #EAF1FF;
+}
+
+.text-electric-blue {
+    color: #2563EB;
+}
+
+.border-electric-blue {
+    border-color: #2563EB;
+}
+
+/* Glass Navbar Background */
+.bg-navy-glass {
+    background: rgba(11, 23, 48, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.border-white-15 {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Electric Blue hover utilities */
+.text-electric-blue-hover {
+    color: #1D4ED8;
+}
+
+.bg-electric-blue {
+    background-color: #2563EB;
+}
+
+.bg-electric-blue-hover {
+    background-color: #1D4ED8;
+}
+
+/* ==========================================================================
+   SERVICE CARD GRADIENT OVERLAYS
+   ========================================================================== */
+
+.gradient-navy-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80%;
+    background: linear-gradient(to top, rgba(11, 31, 68, 0.75) 0%, rgba(11, 31, 68, 0) 70%, transparent 100%);
+    pointer-events: none;
+}
+
+.gradient-navy-bottom-dark {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(11, 31, 68, 0.6) 0%, rgba(11, 31, 68, 0.9) 100%);
+    pointer-events: none;
+}
+
+.ambient-spotlight {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(77, 166, 248, 0.15) 0%, rgba(22, 119, 210, 0.05) 50%, transparent 70%);
+    pointer-events: none;
+    filter: blur(48px);
+}
+
+/* ==========================================================================
+   SERVICES SECTION - BENTO GRID HOVER EFFECTS
+   ========================================================================== */
+
+.service-card-container {
+    position: relative;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.service-card-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(to bottom, rgba(11, 31, 68, 0.05) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.service-card-container:hover::before {
+    opacity: 1;
+}
+
+.glass-button {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 9999px;
+    box-shadow: 0 4px 12px rgba(11, 31, 68, 0.15);
+    transition: all 0.35s ease;
+}
+
+.glass-button:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(11, 31, 68, 0.25);
+}
+
+/* Layout Size Badge Styles */
+.layout-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+
+.layout-badge.small {
+    background-color: rgba(102, 187, 106, 0.15);
+    color: #4cafe4;
+    border: 1px solid rgba(102, 187, 106, 0.3);
+}
+
+.layout-badge.large {
+    background-color: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+    border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.layout-badge.wide {
+    background-color: rgba(244, 163, 87, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(244, 163, 87, 0.3);
+}
+
+.layout-badge.tall {
+    background-color: rgba(53, 176, 244, 0.15);
+    color: #3b82f6;
+    border: 1px solid rgba(53, 176, 244, 0.3);
+}
+
+/* ==========================================================================
+   SERVICES SECTION - ASYMMETRIC BENTO GRID
+   Komposisi asimetris dipertahankan, tapi tiap slot diberi lebar minimal 3
+   kolom dan tinggi baris terkontrol via minmax() supaya tidak ada kartu
+   gepeng, terlalu sempit, atau tingginya bergantung pada panjang konten.
+   Nama area: web, soft, network, it, server, cctv (sesuai urutan slot).
+   ========================================================================== */
+
+/* Setiap kartu dipasangkan ke nama areanya agar tidak jatuh ke
+   auto-placement (kenaikannya: kartu sempit 1 kolom di baris pertama). */
+.bento-web { grid-area: web; }
+.bento-soft { grid-area: soft; }
+.bento-network { grid-area: network; }
+.bento-it { grid-area: it; }
+.bento-server { grid-area: server; }
+.bento-cctv { grid-area: cctv; }
+
+.services-bento {
+    display: grid;
+    align-items: stretch;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(280px, auto);
+    grid-template-areas:
+        "web"
+        "soft"
+        "network"
+        "it"
+        "server"
+        "cctv";
+}
+
+/* Tablet (768px+): grid 6 kolom asimetris */
+@media (min-width: 768px) {
+    .services-bento {
+        gap: 1.5rem;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-rows: repeat(4, minmax(180px, 180px));
+        grid-template-areas:
+            "web web web web soft soft"
+            "web web web web soft soft"
+            "server server server cctv cctv cctv"
+            "network network network it it it";
+    }
+}
+
+/* Desktop (1024px+): Asymmetric Bento Grid - 12 kolom, 3 baris
+   Komposisi sesuai referensi:
+   - Web Development: Large landscape (kolom 1-6, baris 1-2)
+   - Software Application: Tall portrait (kolom 7-8, baris 1-3)
+   - Management Network: Small (kolom 9-10, baris 1)
+   - IT Consultant: Small (kolom 9-10, baris 2)
+   - Server Management: Wide landscape (kolom 1-8, baris 3)
+   - CCTV: Small (kolom 9-12, baris 3) */
+@media (min-width: 1024px) {
+    .services-bento {
+        gap: 1.5rem;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        grid-template-rows: repeat(3, minmax(260px, 260px));
+        grid-template-areas:
+            "web web web web web web soft soft network network it it"
+            "web web web web web web soft soft network network it it"
+            "server server server server server server server server server cctv cctv cctv";
+    }
+}
+
+/* ==========================================================================
+   SERVICES SECTION - MOBILE HORIZONTAL SLIDER
+   ========================================================================== */
+
+/* No scrollbar utility for horizontal scroll-snap containers */
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* ==========================================================================
+   GLOBAL CENTERED ACTIVE CARD CAROUSEL
+   ========================================================================== */
+
+.centered-carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    /* Geser horizontal milik carousel, gulir vertikal tetap berfungsi di layar sentuh */
+    touch-action: pan-y;
+    cursor: grab;
+}
+
+.centered-carousel-container.is-dragging {
+    cursor: grabbing;
+}
+
+/* Track conveyor: kartu tersusun sejajar, transform diatur imperatif dari
+   komponen (translate3d per frame), jadi browser diminta siapkan layer. */
+.centered-carousel-track {
+    display: flex;
+    align-items: stretch;
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* Cegah drag gambar bawaan browser saat pengguna menggeser kartu */
+.centered-carousel-card img,
+.centered-carousel-card a img {
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+.centered-carousel-slide {
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.centered-carousel-card {
+    height: 100%;
+    width: 100%;
+    transform: scale(0.86);
+    opacity: 0.65;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+    will-change: transform, opacity;
+}
+
+.swiper-slide-active {
+    z-index: 10;
+}
+
+.swiper-slide-active .centered-carousel-card {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Saat kartu didaur ulang tapi geometric-nya masih terlihat (viewport sempit,
+   jumlah kartu kecil), kehadirannya di sisi track diberi fade agar tidak muncul
+   mendadak — bantuan terakhir sebelum conveyor mulus memungkinkan. */
+@keyframes slot-reenter-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.slot-reenter > .centered-carousel-card {
+    animation: slot-reenter-fade 0.45s ease-out both;
+}
+
+/* Selama digeser, transisi skala kartu dimatikan agar track terasa kaku &
+   responsif mengikuti pointer; skala tetap diatur oleh kelas active. */
+.centered-carousel-container.is-dragging .centered-carousel-card {
+    transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .centered-carousel-slide,
+    .centered-carousel-card {
+        transition: none !important;
+        transform: scale(1) !important;
+        opacity: 1 !important;
+    }
+
+    .slot-reenter > .centered-carousel-card {
+        animation: none !important;
+    }
+
+    .centered-carousel-container {
+        cursor: default;
+    }
+}
+
+/* ==========================================================================
+   DIALOG (Radix): transisi buka/tutup yang halus
+   ========================================================================== */
+
+/* Plugin animasi tidak dipakai, jadi fade + zoom pendek ditulis di sini.
+   Pemposisian dialog memakai properti `translate` dari utility Tailwind,
+   sehingga keyframe ini TIDAK boleh menyentuh `transform` — kalau keduanya
+   menulis translasi, offset-nya menumpuk dan dialog bergeser dari tengah. */
+@keyframes nds-dialog-overlay-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes nds-dialog-overlay-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes nds-dialog-content-in {
+    from {
+        opacity: 0;
+        scale: 0.97;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+@keyframes nds-dialog-content-out {
+    from {
+        opacity: 1;
+        scale: 1;
+    }
+    to {
+        opacity: 0;
+        scale: 0.97;
+    }
+}
+
+.nds-dialog-overlay[data-state="open"] {
+    animation: nds-dialog-overlay-in 180ms ease-out both;
+}
+
+.nds-dialog-overlay[data-state="closed"] {
+    animation: nds-dialog-overlay-out 140ms ease-in both;
+}
+
+.nds-dialog-content[data-state="open"] {
+    animation: nds-dialog-content-in 220ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.nds-dialog-content[data-state="closed"] {
+    animation: nds-dialog-content-out 150ms ease-in both;
+}
+
+/* ==========================================================================
+   DROPDOWN AUTOCOMPLETE KOTA
+   ========================================================================== */
+
+@keyframes nds-dropdown-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes nds-dropdown-out {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+.nds-dropdown {
+    animation: nds-dropdown-in 150ms ease-out both;
+}
+
+.nds-dropdown-out {
+    animation: nds-dropdown-out 120ms ease-in both;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   POPUP PROMO OTOMATIS
+   ========================================================================== */
+
+/* Fade + zoom pendek, tanpa `transform`: pemposisian popup sudah diurus
+   properti `translate` dari utility dialog, dan keyframe transform justru
+   menumpuk di atasnya. */
+@keyframes promo-popup-enter {
+    from {
+        opacity: 0;
+        scale: 0.98;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+.promo-popup-content[data-state="open"] {
+    animation: promo-popup-enter 240ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.promo-popup-content[data-state="closed"] {
+    animation: nds-dialog-content-out 150ms ease-in both;
+}
+
+/* ==========================================================================
+   PREFERS REDUCE MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .gsap-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
