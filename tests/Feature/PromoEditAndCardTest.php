@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Promo;
-use App\Models\PromoCategory;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -15,7 +15,7 @@ class PromoEditAndCardTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
-    protected PromoCategory $category;
+    protected ServiceCategory $category;
 
     protected function setUp(): void
     {
@@ -23,9 +23,10 @@ class PromoEditAndCardTest extends TestCase
 
         $this->admin = User::first() ?? User::factory()->create([
             'email' => 'admin@test.com',
+            'role' => 'admin',
         ]);
 
-        $this->category = PromoCategory::first() ?? PromoCategory::create([
+        $this->category = ServiceCategory::first() ?? ServiceCategory::create([
             'name' => 'Layanan Cloud',
             'slug' => 'layanan-cloud',
             'sort_order' => 1,
@@ -47,7 +48,7 @@ class PromoEditAndCardTest extends TestCase
         $data = [
             'title' => 'Promo Server Hemat 2026',
             'slug' => 'promo-server-hemat-2026',
-            'promo_category_id' => $this->category->id,
+            'service_category_id' => $this->category->id,
             'description' => 'Diskon server 20%',
             'discount_type' => 'percentage',
             'original_price' => 1000000,
@@ -284,7 +285,7 @@ class PromoEditAndCardTest extends TestCase
     {
         $this->actingAs($this->admin);
 
-        $newCategory = PromoCategory::create([
+        $newCategory = ServiceCategory::create([
             'name' => 'Hardware & Server',
             'slug' => 'hardware-server',
             'sort_order' => 2,
@@ -293,19 +294,19 @@ class PromoEditAndCardTest extends TestCase
         $promo = Promo::create([
             'title' => 'Promo Pengadaan Server',
             'slug' => 'promo-pengadaan-server',
-            'promo_category_id' => $this->category->id,
+            'service_category_id' => $this->category->id,
             'discount_type' => 'none',
             'is_active' => true,
         ]);
 
         $response = $this->put(route('admin.promos.update', $promo->id), [
-            'promo_category_id' => $newCategory->id,
+            'service_category_id' => $newCategory->id,
         ]);
 
         $response->assertRedirect(route('admin.promos.index'));
         $promo->refresh();
 
-        $this->assertEquals($newCategory->id, $promo->promo_category_id);
+        $this->assertEquals($newCategory->id, $promo->service_category_id);
         $this->assertEquals('Promo Pengadaan Server', $promo->title);
     }
 

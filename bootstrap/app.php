@@ -1,10 +1,12 @@
 
 <?php
 
+use App\Http\Controllers\StorageFileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -14,6 +16,16 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
+        then: function () {
+            // Fallback penyajian file disk "public" untuk server yang tidak
+            // memakai symlink public/storage (deployment di subfolder /portal).
+            // File yang ada di public/storage dilayani langsung oleh web
+            // server; file yang belum tersalin di sana jatuh ke route ini.
+            // Tanpa middleware web agar tidak ada overhead session/Inertia.
+            Route::get('storage/{path}', [StorageFileController::class, 'show'])
+                ->where('path', '.*')
+                ->name('storage.serve');
+        },
     )
     ->withMiddleware(function (Middleware $middleware) {
 

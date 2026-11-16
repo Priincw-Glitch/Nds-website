@@ -46,11 +46,16 @@ return new class extends Migration
             // Kategori tanpa padanan (mis. Promo Musiman) dibiarkan tanpa kategori.
         }
 
-        // Lepas FK lama sebelum kolomnya dihapus.
+        // Lepas FK lama sebelum kolomnya dihapus. SQLite (dipakai test) tidak
+        // mendukung drop FK berdasarkan nama; drop per kolomnya diolah lewat
+        // pembuatan ulang tabel oleh grammar SQLite. MySQL memakai nama FK.
+        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
         foreach (Schema::getForeignKeys('promos') as $foreignKey) {
             if (in_array('promo_category_id', $foreignKey['columns'], true)) {
-                Schema::table('promos', function (Blueprint $table) use ($foreignKey) {
-                    $table->dropForeign($foreignKey['name']);
+                Schema::table('promos', function (Blueprint $table) use ($foreignKey, $isSqlite) {
+                    $isSqlite
+                        ? $table->dropForeign($foreignKey['columns'])
+                        : $table->dropForeign($foreignKey['name']);
                 });
             }
         }
@@ -94,10 +99,13 @@ return new class extends Migration
             });
         }
 
+        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
         foreach (Schema::getForeignKeys('promos') as $foreignKey) {
             if (in_array('service_category_id', $foreignKey['columns'], true)) {
-                Schema::table('promos', function (Blueprint $table) use ($foreignKey) {
-                    $table->dropForeign($foreignKey['name']);
+                Schema::table('promos', function (Blueprint $table) use ($foreignKey, $isSqlite) {
+                    $isSqlite
+                        ? $table->dropForeign($foreignKey['columns'])
+                        : $table->dropForeign($foreignKey['name']);
                 });
             }
         }

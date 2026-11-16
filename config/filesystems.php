@@ -33,7 +33,11 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // "serve" membuat Laravel meregistrasi route /storage/{path} yang
+            // menyajikan disk ini (private) dan MENIMPA route penyajian disk
+            // public lain, sehingga URL upload promo/layanan selalu 404/403.
+            // Penyajian file public ditangani StorageFileController.
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],

@@ -31,11 +31,20 @@ return new class extends Migration
 
         // Backfill: pesan lama yang sudah dibaca dianggap terkirim & dibaca
         // pada saat penandaannya; aktivitas percakapan diambil dari pesan
-        // terakhirnya masing-masing.
-        DB::statement(
-            'UPDATE support_tickets st
-             SET st.last_message_at = (SELECT MAX(tm.created_at) FROM ticket_messages tm WHERE tm.ticket_id = st.id)'
-        );
+        // terakhirnya masing-masing. SQLite (dipakai test) tidak menerima
+        // alias tabel pada UPDATE, MySQL menerima — masing-masing pakai
+        // bentuk yang valid.
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            DB::statement(
+                'UPDATE support_tickets
+                 SET last_message_at = (SELECT MAX(tm.created_at) FROM ticket_messages tm WHERE tm.ticket_id = support_tickets.id)'
+            );
+        } else {
+            DB::statement(
+                'UPDATE support_tickets st
+                 SET st.last_message_at = (SELECT MAX(tm.created_at) FROM ticket_messages tm WHERE tm.ticket_id = st.id)'
+            );
+        }
         DB::statement(
             'UPDATE ticket_messages SET delivered_at = updated_at, read_at = updated_at WHERE is_read = 1'
         );

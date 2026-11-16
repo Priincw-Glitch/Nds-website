@@ -432,6 +432,53 @@ const CARD_TONES = {
     },
 } as const;
 
+// Media kartu promo: gambar dengan fallback rapi ketika file gagal dimuat
+// (mis. server belum dapat menjangkau file upload) — peramban tidak
+// menampilkan ikon gambar rusak karena elemen img digantikan placeholder.
+function PromoMedia({
+    src,
+    alt,
+    category,
+    tone,
+}: {
+    src: string | undefined;
+    alt: string;
+    category: string;
+    tone: (typeof CARD_TONES)[keyof typeof CARD_TONES];
+}) {
+    const [failed, setFailed] = useState(false);
+
+    if (!src || failed) {
+        return (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
+                <span className={`flex h-11 w-11 items-center justify-center rounded-full border ${tone.mediaIcon}`}>
+                    <Tag className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <span className={`line-clamp-2 text-[11px] font-semibold uppercase tracking-[0.14em] ${tone.mediaLabel}`}>
+                    {category}
+                </span>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                onError={() => setFailed(true)}
+                className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+            />
+            {/* Scrim tipis di kaki gambar: menjaga badge dan tepi kartu tetap terbaca */}
+            <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-navy/80 to-transparent"
+            />
+        </>
+    );
+}
+
 export function PromoCard({
     promo,
     isFeatured = false,
@@ -459,30 +506,8 @@ export function PromoCard({
     const body = (
         <>
             <div className={`relative aspect-[16/10] w-full shrink-0 overflow-hidden ${tone.media}`}>
-                {imageSrc ? (
-                    <>
-                        <img
-                            src={imageSrc}
-                            alt={promo.title}
-                            loading="lazy"
-                            className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                        />
-                        {/* Scrim tipis di kaki gambar: menjaga badge dan tepi kartu tetap terbaca */}
-                        <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-navy/80 to-transparent"
-                        />
-                    </>
-                ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
-                        <span className={`flex h-11 w-11 items-center justify-center rounded-full border ${tone.mediaIcon}`}>
-                            <Tag className="h-5 w-5" aria-hidden="true" />
-                        </span>
-                        <span className={`line-clamp-2 text-[11px] font-semibold uppercase tracking-[0.14em] ${tone.mediaLabel}`}>
-                            {category}
-                        </span>
-                    </div>
-                )}
+                {/* key memaksa remount saat src berganti (ganti gambar di preview), agar status gagal direset */}
+                <PromoMedia key={imageSrc ?? "tanpa-gambar"} src={imageSrc} alt={promo.title} category={category} tone={tone} />
 
                 {badge && (
                     <span

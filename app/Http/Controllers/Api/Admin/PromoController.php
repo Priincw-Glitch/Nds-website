@@ -148,10 +148,16 @@ class PromoController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            if ($promo->image) {
-                Storage::disk('public')->delete($promo->image);
+            $newPath = $request->file('image')->store('promos', 'public');
+
+            if ($newPath) {
+                if ($promo->image && $promo->image !== $newPath) {
+                    Storage::disk('public')->delete($promo->image);
+                }
+                $data['image'] = $newPath;
+            } else {
+                unset($data['image']);
             }
-            $data['image'] = $request->file('image')->store('promos', 'public');
         } elseif ($request->boolean('remove_image')) {
             if ($promo->image) {
                 Storage::disk('public')->delete($promo->image);
