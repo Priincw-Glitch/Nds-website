@@ -5,7 +5,7 @@ import { Menu, X, ChevronDown, User } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/Components/ui/button";
 import { ServiceIcon } from "@/Components/ServiceIcon";
-import { logoUrl, assetUrl } from "@/utils/assets";
+import { logoUrl, assetUrl, appBase } from "@/utils/assets";
 
 interface NavService {
     id: number;
@@ -154,7 +154,19 @@ export function Navbar() {
     const isAboutActive = url.startsWith("/about");
 
     const darkTopUrls = ["/", "/about", "/services", "/promo", "/blog", "/contact", "/privacy"];
-    const isDarkPage = darkTopUrls.some((p) => (p === "/" ? url === "/" : url.startsWith(p)));
+    // page.url dari Inertia memuat prefix subfolder saat aplikasi dipasang di
+    // bawah root domain (mis. /portal/services). Prefix itu harus dilepas
+    // dulu sebelum dicocokkan dengan darkTopUrls, kalau tidak halaman gelap
+    // di production terdeteksi sebagai halaman terang: navbar transparan
+    // memakai teks navy di atas hero navy sehingga tulisan menu tidak terlihat.
+    let basePath = "";
+    try {
+        basePath = new URL(appBase()).pathname.replace(/\/+$/, "");
+    } catch {
+        basePath = "";
+    }
+    const pathname = (basePath && url.startsWith(basePath) ? url.slice(basePath.length) : url).split("?")[0];
+    const isDarkPage = darkTopUrls.some((p) => (p === "/" ? pathname === "/" || pathname === "" : pathname.startsWith(p)));
     const onDark = (isDarkPage && !isScrolled) || isScrolled;
 
     const logoTransparent = logoUrl(settings?.logo_path);
